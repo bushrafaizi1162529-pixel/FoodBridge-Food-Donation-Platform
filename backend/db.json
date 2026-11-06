@@ -1,0 +1,126 @@
+{
+  "users": [
+    {
+      "id": "donor_hyatt",
+      "name": "Grand Royal Banquet Hall",
+      "email": "banquet@grandroyal.com",
+      "phone": "+91 98765 43210",
+      "address": "Venkateshwara Hills Road, Hyderabad",
+      "role": "donor",
+      "donor_type": "hotel",
+      "points": 1250,
+      "badges": [
+        "Golden Heart",
+        "Surplus Slayer",
+        "Buffet Hero"
+      ],
+      "created_at": "2026-07-05T11:16:06.464Z"
+    },
+    {
+      "id": "donor_annapurna",
+      "name": "Annapurna Catering Services",
+      "email": "contact@annacaters.co.in",
+      "phone": "+91 87654 32109",
+      "address": "Sankey Road, Sadashivanagar, Bengaluru",
+      "role": "donor",
+      "donor_type": "caterer",
+      "points": 840,
+      "badges": [
+        "Zero Waste Champ",
+        "Wedding Saviour"
+      ],
+      "created_at": "2026-07-05T11:16:06.481Z"
+    },
+    {
+      "id": "ngo_rotifoundation",
+      "name": "Roti Seva Foundation",
+      "email": "hope@rotiseva.org",
+      "phone": "+91 99887 76655",
+      "address": "Gachibowli Ring Road Outer Corridor, Hyderabad",
+      "role": "ngo",
+      "ngo_reg_id": "NGO-HYD-55428-A",
+      "is_verified": true,
+      "points": 2100,
+      "badges": [
+        "Super Distributor",
+        "Midnight Angels",
+        "Verified Ally"
+      ],
+      "created_at": "2026-07-05T11:16:06.481Z"
+    },
+    {
+      "id": "ngo_feedinghands",
+      "name": "Feeding Hands Mission",
+      "email": "connect@feedinghands.org",
+      "phone": "+91 88990 11223",
+      "address": "Anna Nagar West Block, Chennai",
+      "role": "ngo",
+      "ngo_reg_id": "NGO-TN-90112-B",
+      "is_verified": false,
+      "points": 420,
+      "badges": [
+        "Quick Responder"
+      ],
+      "created_at": "2026-07-05T11:16:06.481Z"
+    },
+    {
+      "id": "admin_god",
+      "name": "FoodBridge Global Admin",
+      "email": "admin@foodbridge.org",
+      "phone": "+91 90000 00001",
+      "address": "HQ Command Desk, New Delhi",
+      "role": "admin",
+      "points": 9999,
+      "badges": [
+        "Pioneer Defender"
+      ],
+      "created_at": "2026-07-05T11:16:06.481Z"
+    }
+  ],
+  "food_donations": [
+    {
+      "id": "donation_1",
+      "donor_id": "donor_hyatt",
+      "donor_name": "Grand Royal Banquet Hall",
+      "food_name": "Buffet Feast: Jeera Rice, Paneer Butter Masala, Roti",
+      "category": "cooked",
+      "quantity": "45 Servings",
+      "expiry_time": "2026-07-05T16:16:06.481Z",
+      "location": "Venkateshwara Hills Road, Hyderabad",
+      "latitude": 17.4126,
+      "longitude": 78.4482,
+      "description": "Fully packed in insulated carriers. Packed at 9:30 AM. Keep hot.",
+      "status": "available",
+      "image_url": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop&q=80",
+      "created_at": "2026-07-05T10:16:06.481Z"
+    },
+    {
+      "id": "donation_2",
+      "donor_id": "donor_annapurna",
+      "donor_name": "Annapurna Catering",
+      "food_name": "Fresh Wedding surplus Vegetable Biryani & Raita",
+      "category": "cooked",
+      "quantity": "120 Servings",
+      "expiry_time": "2026-07-05T14:16:06.481Z",
+      "location": "Sankey Road, Sadashivanagar, Bengaluru",
+      "latitude": 13.0034,
+      "longitude": 77.5796,
+      "description": "Stored in premium food-grade aluminum buckets. High nutritional rating.",
+      "status": "claimed",
+      "image_url": "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=600&auto=format&fit=crop&q=80",
+      "created_at": "2026-07-05T09:16:06.481Z",
+      "assigned_ngo_id": "ngo_rotifoundation",
+      "assigned_ngo_name": "Roti Seva Foundation",
+      "pickup_time": "14:30"
+    }
+  ],
+  "pickup_requests": [],
+  "notifications": [
+    {
+      "id": "notif_1",
+      "user_id": "ngo_rotifoundation",
+      "message": "Urgent Cargo Nearby: Urgent: 120 servings of fresh wedding biryani posted nearby in Sankey Road!",
+      "created_at": "2026-07-05T11:06:06.481Z"
+    }
+  ]
+}

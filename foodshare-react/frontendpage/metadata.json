@@ -1,0 +1,6 @@
+{
+  "name": "FoodBridge",
+  "description": "FoodBridge is a premium, community-driven food donation platform connecting surplus food with local NGOs and volunteers. Features 5-language dynamic translations, responsive dark/light theme, interactive simulated pickup tracking, live dashboards, maps, and leaderboard gamification.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

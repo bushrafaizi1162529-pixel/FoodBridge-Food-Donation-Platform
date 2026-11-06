@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Compact High-Density Scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.25);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(234, 88, 12, 0.4);
+  }
+}
+
+/* Animations and Premium Dark glow styles */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(1) translate(-50%, -50%);
+  }
+  50% {
+    opacity: 0.25;
+    transform: scale(1.1) translate(-48%, -48%);
+  }
+}
+
+@keyframes floatOrb1 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(120px, -180px) scale(1.2);
+  }
+  66% {
+    transform: translate(-80px, 100px) scale(0.85);
+  }
+}
+
+@keyframes floatOrb2 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(0.9);
+  }
+  40% {
+    transform: translate(-140px, 140px) scale(1.25);
+  }
+  75% {
+    transform: translate(80px, -60px) scale(0.95);
+  }
+}
+
+@keyframes floatOrb3 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1.1);
+  }
+  50% {
+    transform: translate(150px, 120px) scale(0.8);
+  }
+}
+
+@keyframes slowSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Atmospheric orbs for light and dark modes */
+.orb-orange {
+  background: radial-gradient(circle at center, rgba(234, 88, 12, 0.12) 0%, rgba(249, 115, 22, 0.04) 50%, transparent 100%);
+  filter: blur(100px);
+  animation: floatOrb1 24s infinite ease-in-out;
+}
+.dark .orb-orange {
+  background: radial-gradient(circle at center, rgba(234, 88, 12, 0.18) 0%, rgba(249, 115, 22, 0.06) 50%, transparent 100%);
+}
+
+.orb-teal {
+  background: radial-gradient(circle at center, rgba(20, 184, 166, 0.1) 0%, rgba(13, 148, 136, 0.03) 50%, transparent 100%);
+  filter: blur(110px);
+  animation: floatOrb2 28s infinite ease-in-out;
+}
+.dark .orb-teal {
+  background: radial-gradient(circle at center, rgba(20, 184, 166, 0.16) 0%, rgba(13, 148, 136, 0.05) 50%, transparent 100%);
+}
+
+.orb-rose {
+  background: radial-gradient(circle at center, rgba(244, 63, 94, 0.08) 0%, rgba(225, 29, 72, 0.02) 50%, transparent 100%);
+  filter: blur(95px);
+  animation: floatOrb3 20s infinite ease-in-out;
+}
+.dark .orb-rose {
+  background: radial-gradient(circle at center, rgba(244, 63, 94, 0.16) 0%, rgba(225, 29, 72, 0.05) 50%, transparent 100%);
+}
+
+.orb-purple {
+  background: radial-gradient(circle at center, rgba(147, 51, 234, 0.08) 0%, rgba(168, 85, 247, 0.02) 50%, transparent 100%);
+  filter: blur(105px);
+  animation: floatOrb1 32s infinite ease-in-out alternate;
+}
+.dark .orb-purple {
+  background: radial-gradient(circle at center, rgba(147, 51, 234, 0.15) 0%, rgba(168, 85, 247, 0.04) 50%, transparent 100%);
+}
+
+.high-density-bg {
+  position: relative;
+}
+
+.high-density-bg::before {
+  content: "";
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.15) 0%, rgba(245, 158, 11, 0.05) 50%, transparent 100%);
+  border-radius: 9999px;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  animation: pulseGlow 12s infinite ease-in-out;
+}
+
+/* Micro Status indicator */
+.badge-ping {
+  position: relative;
+  display: inline-flex;
+}
+.badge-ping::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: currentColor;
+  opacity: 0.75;
+  animation: ping 1.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Hide leaflet routing machine text itinerary to keep map clean */
+.leaflet-routing-container {
+  display: none !important;
+}
