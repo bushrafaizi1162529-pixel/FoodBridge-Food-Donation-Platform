@@ -13,8 +13,23 @@ const supabase = require('./supabaseClient');
 
 const app = express();
 
+// Configure allowed origins for local development and production
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
+];
+
+if (process.env.FRONTEND_URL) {
+    const formatted = process.env.FRONTEND_URL.trim().replace(/\/+$/, '');
+    if (formatted && !allowedOrigins.includes(formatted)) {
+        allowedOrigins.push(formatted);
+    }
+}
+
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));

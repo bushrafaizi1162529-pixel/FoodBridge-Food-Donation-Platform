@@ -43,7 +43,7 @@ interface FoodBridgeContextType {
 const FoodBridgeContext = createContext<FoodBridgeContextType | undefined>(undefined);
 
 export const FoodBridgeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const API_URL = "http://localhost:5000";
+  const API_URL = (import.meta as any).env.VITE_API_URL || "http://localhost:5000";
 
   // Persistence 
   const [language, setLanguageState] = useState<Language>(() => {
