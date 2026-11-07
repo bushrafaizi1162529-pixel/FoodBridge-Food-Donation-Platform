@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
     points INTEGER DEFAULT 100,
     badges JSONB DEFAULT '[]'::jsonb,
     address TEXT,
+    avatar_url TEXT,
     "avatarUrl" TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -83,7 +84,7 @@ CREATE POLICY "Allow public access for pickup_requests" ON pickup_requests FOR A
 DROP POLICY IF EXISTS "Allow public access for notifications" ON notifications;
 CREATE POLICY "Allow public access for notifications" ON notifications FOR ALL USING (true) WITH CHECK (true);
 
--- Seed initial records (safe to run multiple times)
+-- Seed initial records (safe to re-run multiple times)
 INSERT INTO users (id, name, email, phone, address, role, donor_type, points, badges, is_verified)
 VALUES 
   ('donor_hyatt', 'Grand Royal Banquet Hall', 'banquet@grandroyal.com', '+91 98765 43210', 'Venkateshwara Hills Road, Hyderabad', 'donor', 'hotel', 1250, '["Golden Heart", "Surplus Slayer", "Buffet Hero"]'::jsonb, true),
@@ -95,6 +96,6 @@ ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO food_donations (id, donor_id, donor_name, food_name, category, quantity, expiry_time, location, latitude, longitude, description, status, image_url)
 VALUES
-  ('donation_1', 'donor_hyatt', 'Grand Royal Banquet Hall', 'Buffet Feast: Jeera Rice, Paneer Butter Masala, Roti', 'cooked', '45 Servings', NOW() + INTERVAL '5 hours', 'Venkateshwara Hills Road, Hyderabad', 17.4126, 78.4482, 'Fully packed in insulated carriers. Packed at 9:30 AM. Keep hot.', 'available', 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop&q=80'),
-  ('donation_2', 'donor_annapurna', 'Annapurna Catering', 'Fresh Wedding surplus Vegetable Biryani & Raita', 'cooked', '120 Servings', NOW() + INTERVAL '3 hours', 'Sankey Road, Sadashivanagar, Bengaluru', 13.0034, 77.5796, 'Stored in premium food-grade aluminum buckets. High nutritional rating.', 'claimed', 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=600&auto=format&fit=crop&q=80')
+  ('donation_1', 'donor_hyatt', 'Grand Royal Banquet Hall', 'Buffet Feast: Jeera Rice, Paneer Butter Masala, Roti', 'cooked', '45 Servings', NOW() + INTERVAL '5 hours', 'Venkateshwara Hills Road, Hyderabad', 17.4126, 78.4482, 'Fully packed in insulated carriers. Keep hot.', 'available', 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&auto=format&fit=crop&q=80'),
+  ('donation_2', 'donor_annapurna', 'Annapurna Catering', 'Fresh Wedding surplus Vegetable Biryani & Raita', 'cooked', '120 Servings', NOW() + INTERVAL '3 hours', 'Sankey Road, Sadashivanagar, Bengaluru', 13.0034, 77.5796, 'Stored in premium food-grade aluminum buckets.', 'claimed', 'https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=600&auto=format&fit=crop&q=80')
 ON CONFLICT (id) DO NOTHING;
