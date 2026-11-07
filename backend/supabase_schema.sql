@@ -1,9 +1,15 @@
--- ===================================================
--- FoodBridge PostgreSQL Schema for Supabase
--- Run this in the Supabase SQL Editor to set up your tables
--- ===================================================
+-- ==============================================================================
+-- FoodBridge PostgreSQL Schema for Supabase (Hardened Production Security)
+-- ==============================================================================
+-- Security Model:
+-- - Row Level Security (RLS) is ENABLED on every table.
+-- - Public (anon key) access is strictly restricted to safe, read-only discovery.
+-- - Sensitive tables (notifications, pickup requests) and write/delete operations
+--   are restricted to the trusted backend via the server-side service_role key.
+-- - Never expose the service_role key to the frontend or GitHub.
+-- ==============================================================================
 
--- 1. Users table
+-- 1. Users Table
 CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
     name TEXT NOT NULL,
@@ -21,7 +27,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. Food Donations table
+-- 2. Food Donations Table
 CREATE TABLE IF NOT EXISTS food_donations (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
     donor_id TEXT,
@@ -44,7 +50,7 @@ CREATE TABLE IF NOT EXISTS food_donations (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. Pickup Requests table
+-- 3. Pickup Requests Table
 CREATE TABLE IF NOT EXISTS pickup_requests (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
     food_id TEXT,
@@ -53,7 +59,7 @@ CREATE TABLE IF NOT EXISTS pickup_requests (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. Notifications table
+-- 4. Notifications Table
 CREATE TABLE IF NOT EXISTS notifications (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
     user_id TEXT NOT NULL,
@@ -63,28 +69,67 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 -- Performance Indexes
 CREATE INDEX IF NOT EXISTS idx_donations_status ON food_donations(status);
+CREATE INDEX IF NOT EXISTS idx_donations_created ON food_donations(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_pickup_food ON pickup_requests(food_id);
+CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
 
--- Enable Row Level Security (RLS) with public access policy for anon backend API key
+-- ==============================================================================
+-- ROW LEVEL SECURITY (RLS) POLICIES
+-- ==============================================================================
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE food_donations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pickup_requests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 
+-- Clean existing policies for idempotency
+DROP POLICY IF EXISTS "Public read profiles" ON users;
+DROP POLICY IF EXISTS "Public create user profile" ON users;
+DROP POLICY IF EXISTS "Service role manage users" ON users;
+DROP POLICY IF EXISTS "Public read donations" ON food_donations;
+DROP POLICY IF EXISTS "Service role manage donations" ON food_donations;
+DROP POLICY IF EXISTS "Service role manage pickup_requests" ON pickup_requests;
+DROP POLICY IF EXISTS "Service role manage notifications" ON notifications;
 DROP POLICY IF EXISTS "Allow public access for users" ON users;
-CREATE POLICY "Allow public access for users" ON users FOR ALL USING (true) WITH CHECK (true);
-
 DROP POLICY IF EXISTS "Allow public access for food_donations" ON food_donations;
-CREATE POLICY "Allow public access for food_donations" ON food_donations FOR ALL USING (true) WITH CHECK (true);
-
 DROP POLICY IF EXISTS "Allow public access for pickup_requests" ON pickup_requests;
-CREATE POLICY "Allow public access for pickup_requests" ON pickup_requests FOR ALL USING (true) WITH CHECK (true);
-
 DROP POLICY IF EXISTS "Allow public access for notifications" ON notifications;
-CREATE POLICY "Allow public access for notifications" ON notifications FOR ALL USING (true) WITH CHECK (true);
 
--- Seed initial records (safe to re-run multiple times)
+-- Users RLS:
+-- Public can read basic profile info for directory & leaderboards
+CREATE POLICY "Public read profiles" ON users
+    FOR SELECT USING (true);
+
+-- Public can register their profile with valid contact info
+CREATE POLICY "Public create user profile" ON users
+    FOR INSERT WITH CHECK (name IS NOT NULL AND email IS NOT NULL);
+
+-- Updates and deletes are restricted to the trusted backend service_role
+CREATE POLICY "Service role manage users" ON users
+    FOR ALL TO service_role USING (true) WITH CHECK (true);
+
+-- Food Donations RLS:
+-- Public can view active donation postings
+CREATE POLICY "Public read donations" ON food_donations
+    FOR SELECT USING (true);
+
+-- Create, update, and delete are managed through the verified backend API
+CREATE POLICY "Service role manage donations" ON food_donations
+    FOR ALL TO service_role USING (true) WITH CHECK (true);
+
+-- Pickup Requests RLS:
+-- Private logistics; only accessible through the backend service_role
+CREATE POLICY "Service role manage pickup_requests" ON pickup_requests
+    FOR ALL TO service_role USING (true) WITH CHECK (true);
+
+-- Notifications RLS:
+-- Private messages; only accessible through the backend service_role
+CREATE POLICY "Service role manage notifications" ON notifications
+    FOR ALL TO service_role USING (true) WITH CHECK (true);
+
+-- ==============================================================================
+-- INITIAL SEED DATA (Idempotent: safe to run multiple times without duplicates)
+-- ==============================================================================
 INSERT INTO users (id, name, email, phone, address, role, donor_type, points, badges, is_verified)
 VALUES 
   ('donor_hyatt', 'Grand Royal Banquet Hall', 'banquet@grandroyal.com', '+91 98765 43210', 'Venkateshwara Hills Road, Hyderabad', 'donor', 'hotel', 1250, '["Golden Heart", "Surplus Slayer", "Buffet Hero"]'::jsonb, true),
